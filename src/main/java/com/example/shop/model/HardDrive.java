@@ -1,5 +1,6 @@
 package com.example.shop.model;
 
+import com.example.shop.model.enums.LaptopSize;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
@@ -19,9 +20,12 @@ public class HardDrive extends Item{
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @NotBlank
     private int volumeValue;
-    @NotBlank
     public String measureUnit;
 
+    public HardDrive(String serialNumber, String producer, float price, long amountAtStock, int volumeValue, String measureUnit) {
+        super(serialNumber, producer, price, amountAtStock);
+        this.volumeValue = volumeValue;
+        this.measureUnit = measureUnit;
+    }
 }

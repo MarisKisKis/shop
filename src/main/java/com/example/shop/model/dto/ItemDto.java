@@ -1,25 +1,20 @@
-package com.example.shop.model;
+package com.example.shop.model.dto;
 
 import com.example.shop.model.enums.FormFactor;
-import com.example.shop.model.enums.LaptopSize;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.jackson.Jacksonized;
-
-import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
 @Builder
 @Jacksonized
 public class ItemDto {
-    @NotBlank
     private String serialNumber;
-    @NotBlank
     private String producer;
-    @NotBlank
     private float price;
+    private String amountAtStock;
     private DesktopPCDto desktopPCDto;
     private HardDriveDto hardDriveDto;
     private LaptopDto laptopDto;
@@ -47,7 +42,7 @@ public class ItemDto {
     @Builder
     @Jacksonized
     public static class LaptopDto {
-        private LaptopSize size;
+        private int size;
     }
 
     @Getter

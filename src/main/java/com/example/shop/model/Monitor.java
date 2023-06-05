@@ -12,14 +12,20 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
+@Builder
 @Table(name = "monitors")
-public class Monitor {
+public class Monitor extends Item {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private Long id;
-    @NotBlank
     private float diagonalValue;
-    @NotBlank
     public String measureUnit;
+
+    @Builder
+    public Monitor(String serialNumber, String producer, float price, long amountAtStock, float diagonalValue, String measureUnit) {
+        super(serialNumber, producer, price, amountAtStock);
+        this.diagonalValue = diagonalValue;
+        this.measureUnit = measureUnit;
+    }
 }

@@ -20,9 +20,11 @@ public class DesktopPC extends Item{
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @NotBlank
+    @Enumerated
     private FormFactor formFactor;
 
-    public DesktopPC(String serialNumber, String producer, float price, FormFactor formFactor) {
+    public DesktopPC(String serialNumber, String producer, float price, long amountAtStock, FormFactor formFactor) {
+        super(serialNumber, producer, price, amountAtStock);
+        this.formFactor = formFactor;
     }
 }

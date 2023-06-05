@@ -20,7 +20,11 @@ public class Laptop extends Item{
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @NotBlank
     @Column(name = "size")
-    private LaptopSize size;
+    private int size;
+
+    public Laptop(String serialNumber, String producer, float price, long amountAtStock, int size) {
+        super(serialNumber, producer, price, amountAtStock);
+        this.size = size;
+    }
 }
