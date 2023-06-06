@@ -1,6 +1,8 @@
 package com.example.shop.model.dto;
 
 import com.example.shop.model.enums.FormFactor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +12,9 @@ import lombok.extern.jackson.Jacksonized;
 @Setter
 @Builder
 @Jacksonized
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ItemDto {
+    private long id;
     private String serialNumber;
     private String producer;
     private float price;

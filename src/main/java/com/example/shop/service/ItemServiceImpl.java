@@ -43,21 +43,19 @@ public class ItemServiceImpl implements ItemService{
 
     @Override
     public void save(ItemDto itemDto) {
-        long amount = Long.parseLong(itemDto.getAmountAtStock());
+        long amount = 0;
+        if (itemDto.getAmountAtStock() != null) {
+            amount = Long.parseLong(itemDto.getAmountAtStock());
+        }
         if (itemDto.getDesktopPCDto()!= null) {
-            desktopPCRepository.save(ItemMapper.toDesktopPC(itemDto));
+            desktopPCRepository.save(ItemMapper.toDesktopPC(itemDto, amount));
         } else if (itemDto.getHardDriveDto() != null) {
-            hardDriveRepository.save(ItemMapper.toHardDrive(itemDto));
+            hardDriveRepository.save(ItemMapper.toHardDrive(itemDto, amount));
         } else if (itemDto.getLaptopDto() != null) {
-            laptopRepository.save(ItemMapper.toLaptop(itemDto));
+            laptopRepository.save(ItemMapper.toLaptop(itemDto, amount));
         } else if (itemDto.getMonitorDto() != null) {
-            Monitor monitor = new Monitor();
-            monitor.setSerialNumber(itemDto.getSerialNumber());
-            monitor.setProducer(itemDto.getProducer());
-            monitor.setPrice(itemDto.getPrice());
-            monitor.setAmountAtStock(amount);
-            monitor.setDiagonalValue(itemDto.getMonitorDto().getDiagonalValue());
-            monitor.setMeasureUnit(itemDto.getMonitorDto().getMeasureUnit());
+            Monitor monitor = new Monitor(itemDto.getSerialNumber(), itemDto.getProducer(), itemDto.getPrice(), amount,
+                    itemDto.getMonitorDto().getDiagonalValue(), itemDto.getMonitorDto().getMeasureUnit());
             monitorRepository.save(monitor);
         }
     }
@@ -65,17 +63,17 @@ public class ItemServiceImpl implements ItemService{
     @Override
     public List<ItemDto> getAllItemsByType(String itemType) {
         List<ItemDto> itemsToReturn = new ArrayList<>();
-        if (itemType == "desktopPC") {
+        if (Objects.equals(itemType, "desktopPC")) {
             itemsToReturn = desktopPCRepository.findAll()
                     .stream()
                     .map(ItemMapper::toItemDtoFromPc)
                     .collect(Collectors.toList());
-        } else if (itemType == "hardDrive"){
+        } else if (Objects.equals(itemType, "hardDrive")){
             itemsToReturn = hardDriveRepository.findAll()
                     .stream()
                     .map(ItemMapper::toItemDtoFromHardDrive)
                     .collect(Collectors.toList());
-        } else if (itemType == "laptop"){
+        } else if (Objects.equals(itemType, "laptop")){
             itemsToReturn = laptopRepository.findAll()
                     .stream()
                     .map(ItemMapper::toItemDtoFromLaptop)
@@ -147,7 +145,7 @@ public class ItemServiceImpl implements ItemService{
                 if (itemDto.getAmountAtStock() != null) {
                     desktopPC.setAmountAtStock(Long.parseLong(itemDto.getAmountAtStock()));
                 }
-                if (itemDto.getDesktopPCDto().getFormFactor() != null) {
+                if (itemDto.getDesktopPCDto() != null) {
                     desktopPC.setFormFactor(itemDto.getDesktopPCDto().getFormFactor());
                 }
                 desktopPCRepository.save(desktopPC);
@@ -167,11 +165,13 @@ public class ItemServiceImpl implements ItemService{
                 if (itemDto.getAmountAtStock() != null) {
                     hardDrive.setAmountAtStock(Long.parseLong(itemDto.getAmountAtStock()));
                 }
-                if (itemDto.getHardDriveDto().getVolumeValue() != 0) {
-                    hardDrive.setVolumeValue(itemDto.getHardDriveDto().getVolumeValue());
-                }
-                if (itemDto.getHardDriveDto().getMeasureUnit() != null) {
-                    hardDrive.setMeasureUnit(itemDto.getHardDriveDto().getMeasureUnit());
+                if (itemDto.getHardDriveDto() != null) {
+                    if (itemDto.getHardDriveDto().getVolumeValue() != 0) {
+                        hardDrive.setVolumeValue(itemDto.getHardDriveDto().getVolumeValue());
+                    }
+                    if (itemDto.getHardDriveDto().getMeasureUnit() != null) {
+                        hardDrive.setMeasureUnit(itemDto.getHardDriveDto().getMeasureUnit());
+                    }
                 }
                 hardDriveRepository.save(hardDrive);
                 returnItemDto = ItemMapper.toItemDtoFromHardDrive(getHardDrive(id));
@@ -190,7 +190,7 @@ public class ItemServiceImpl implements ItemService{
                 if (itemDto.getAmountAtStock() != null) {
                     laptop.setAmountAtStock(Long.parseLong(itemDto.getAmountAtStock()));
                 }
-                if (itemDto.getLaptopDto().getSize() != 0) {
+                if (itemDto.getLaptopDto() != null) {
                     laptop.setSize(itemDto.getLaptopDto().getSize());
                 }
                 laptopRepository.save(laptop);
@@ -210,11 +210,13 @@ public class ItemServiceImpl implements ItemService{
                 if (itemDto.getAmountAtStock() != null) {
                     monitor.setAmountAtStock(Long.parseLong(itemDto.getAmountAtStock()));
                 }
-                if (itemDto.getMonitorDto().getDiagonalValue() != 0) {
-                    monitor.setDiagonalValue(itemDto.getMonitorDto().getDiagonalValue());
-                }
-                if (itemDto.getMonitorDto().getMeasureUnit() != null) {
-                    monitor.setMeasureUnit(itemDto.getMonitorDto().getMeasureUnit());
+                if (itemDto.getMonitorDto() != null) {
+                    if (itemDto.getMonitorDto().getDiagonalValue() != 0) {
+                        monitor.setDiagonalValue(itemDto.getMonitorDto().getDiagonalValue());
+                    }
+                    if (itemDto.getMonitorDto().getMeasureUnit() != null) {
+                        monitor.setMeasureUnit(itemDto.getMonitorDto().getMeasureUnit());
+                    }
                 }
                 monitorRepository.save(monitor);
                 returnItemDto = ItemMapper.toItemDtoFromMonitor(getMonitor(id));

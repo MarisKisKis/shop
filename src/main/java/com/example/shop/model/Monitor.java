@@ -22,7 +22,6 @@ public class Monitor extends Item {
     private float diagonalValue;
     public String measureUnit;
 
-    @Builder
     public Monitor(String serialNumber, String producer, float price, long amountAtStock, float diagonalValue, String measureUnit) {
         super(serialNumber, producer, price, amountAtStock);
         this.diagonalValue = diagonalValue;

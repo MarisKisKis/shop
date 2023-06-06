@@ -61,7 +61,7 @@ public class ItemController {
     }
 
     @PatchMapping
-    public ItemDto updateItem(@RequestParam String itemType, @RequestParam long id, @RequestBody ItemDto itemDto) {
+    public ItemDto updateItem(@RequestParam("type") String itemType, @RequestParam("id") long id, @RequestBody ItemDto itemDto) {
         log.trace("Обновляем товар типа {} с id {}", itemType, id);
         return itemService.updateItem(id, itemDto, itemType);
     }
